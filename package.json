@@ -1,0 +1,14 @@
+{
+  "name": "ngx-gsap",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}
