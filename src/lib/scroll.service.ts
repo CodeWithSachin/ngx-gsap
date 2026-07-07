@@ -24,6 +24,8 @@ export class ScrollService {
 
   init(): void {
     if (!this.isBrowser || this.lenis) return;
+    // Reduced motion: keep native scrolling; ScrollTrigger listens natively.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     this.lenis = new Lenis({ lerp: 0.12 });
     document.documentElement.classList.add('lenis', 'lenis-smooth');
@@ -42,7 +44,11 @@ export class ScrollService {
   };
 
   scrollTo(target: string | number | HTMLElement, offset = 0): void {
-    this.lenis?.scrollTo(target as never, { offset });
+    if (this.lenis) {
+      this.lenis.scrollTo(target as never, { offset });
+    } else if (this.isBrowser && typeof target === 'string') {
+      document.querySelector(target)?.scrollIntoView();
+    }
   }
 
   stop(): void {

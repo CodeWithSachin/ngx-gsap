@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
+import { prefersReducedMotion } from './reduced-motion';
 
 /**
  * Declarative scroll-scrubbed timeline bound to the host element.
@@ -34,18 +35,22 @@ export class ScrubTimelineDirective {
     const destroyRef = inject(DestroyRef);
 
     afterNextRender(() => {
+      const reduced = prefersReducedMotion();
       const ctx = gsap.context(() => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: this.el.nativeElement,
-            start: this.start(),
-            end: this.end(),
-            scrub: this.scrub(),
-            pin: this.pin(),
-            markers: this.markers(),
-          },
-        });
-        this.timelineReady.emit(tl);
+        const tl = reduced
+          ? gsap.timeline({ paused: true })
+          : gsap.timeline({
+              scrollTrigger: {
+                trigger: this.el.nativeElement,
+                start: this.start(),
+                end: this.end(),
+                scrub: this.scrub(),
+                pin: this.pin(),
+                markers: this.markers(),
+              },
+            });
+        this.timelineReady.emit(tl); // consumer populates synchronously
+        if (reduced) tl.progress(1).pause(); // jump to final state
       }, this.el.nativeElement);
 
       destroyRef.onDestroy(() => ctx.revert());

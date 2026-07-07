@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
+import { prefersReducedMotion } from './reduced-motion';
 
 /**
  * Infinite marquee. Wraps host content in a track, clones it until the row
@@ -31,6 +32,7 @@ export class MarqueeDirective {
     const destroyRef = inject(DestroyRef);
 
     afterNextRender(() => {
+      if (prefersReducedMotion()) return; // static single row
       const host = this.el.nativeElement;
       host.style.overflow = 'hidden';
       host.style.display = 'flex';

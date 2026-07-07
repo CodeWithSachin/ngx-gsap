@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
+import { prefersReducedMotion } from './reduced-motion';
 
 /**
  * Counts the host's text from 0 to `ngxCountUp` when scrolled into view.
@@ -28,6 +29,10 @@ export class CountUpDirective {
 
     afterNextRender(() => {
       const host = this.el.nativeElement;
+      if (prefersReducedMotion()) {
+        host.textContent = `${this.ngxCountUp()}${this.suffix()}`;
+        return;
+      }
       const state = { value: 0 };
 
       const tween = gsap.to(state, {

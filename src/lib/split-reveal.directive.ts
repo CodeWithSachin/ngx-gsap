@@ -10,6 +10,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
+import { prefersReducedMotion } from './reduced-motion';
 
 /**
  * Split-text reveal on scroll (GSAP SplitText 3.13).
@@ -33,6 +34,7 @@ export class SplitRevealDirective {
     const destroyRef = inject(DestroyRef);
 
     afterNextRender(() => {
+      if (prefersReducedMotion()) return; // text simply stays visible
       const host = this.el.nativeElement;
       const split = new SplitText(host, { type: this.mode() });
       const targets =

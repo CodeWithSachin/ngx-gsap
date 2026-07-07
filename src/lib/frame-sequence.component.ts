@@ -13,6 +13,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { prefersReducedMotion } from './reduced-motion';
 
 /**
  * Scroll-scrubbed canvas frame sequence (the Navarasa tiger / Drishti eyes).
@@ -56,37 +57,48 @@ export class FrameSequenceComponent {
     afterNextRender(() => {
       const el = this.host.nativeElement;
       const triggers: ScrollTrigger[] = [];
+      const reduced = prefersReducedMotion();
 
-      // Lazy preload ~2 viewports before arrival.
+      // Lazy preload ~2 viewports before arrival; reduced motion shows the
+      // final frame and completes overlays immediately (no pin, no scrub).
       triggers.push(
         ScrollTrigger.create({
           trigger: el,
           start: 'top 200%',
           once: true,
-          onEnter: () => void this.preload().then(() => this.draw(this.frameIndex)),
+          onEnter: () =>
+            void this.preload().then(() => {
+              if (reduced) {
+                this.frameIndex = this.frames().length - 1;
+                this.progress.set(1);
+              }
+              this.draw(this.frameIndex);
+            }),
         }),
       );
 
       const state = { frame: 0 };
       const count = () => this.frames().length;
 
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'top top',
-          end: () => `+=${(this.pinLength() / 100) * window.innerHeight}`,
-          pin: this.pinLength() > 0,
-          scrub: 0.5,
-          onUpdate: (st) => {
-            this.progress.set(st.progress);
-            const next = Math.min(count() - 1, Math.floor(st.progress * count()));
-            if (next !== state.frame) {
-              state.frame = next;
-              this.draw(next);
-            }
-          },
-        }),
-      );
+      if (!reduced) {
+        triggers.push(
+          ScrollTrigger.create({
+            trigger: el,
+            start: 'top top',
+            end: () => `+=${(this.pinLength() / 100) * window.innerHeight}`,
+            pin: this.pinLength() > 0,
+            scrub: 0.5,
+            onUpdate: (st) => {
+              this.progress.set(st.progress);
+              const next = Math.min(count() - 1, Math.floor(st.progress * count()));
+              if (next !== state.frame) {
+                state.frame = next;
+                this.draw(next);
+              }
+            },
+          }),
+        );
+      }
 
       const onResize = () => {
         this.resizeCanvas();
