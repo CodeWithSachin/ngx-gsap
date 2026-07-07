@@ -21,11 +21,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
  * - Draws ImageBitmaps at devicePixelRatio (capped at 2)
  * - `pinLength` = how many viewport-heights of scroll the pin consumes
  *
- * Place inside a full-viewport sticky/pinned host section.
+ * Projected content (`<ng-content>`) is rendered above the canvas and rides
+ * along while pinned — use it for overlay text driven by `progress()`.
  */
 @Component({
   selector: 'ngx-frame-sequence',
-  template: `<canvas #cv style="display:block;width:100%;height:100%"></canvas>`,
+  template: `
+    <canvas #cv style="position:absolute;inset:0;display:block;width:100%;height:100%"></canvas>
+    <ng-content />
+  `,
+  host: { style: 'position:relative;display:block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameSequenceComponent {
