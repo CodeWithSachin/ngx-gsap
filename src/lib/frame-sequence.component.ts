@@ -31,7 +31,9 @@ import { prefersReducedMotion } from './reduced-motion';
     <canvas #cv style="position:absolute;inset:0;display:block;width:100%;height:100%"></canvas>
     <ng-content />
   `,
-  host: { style: 'position:relative;display:block' },
+  // :host (not inline style) so consumer classes like `absolute inset-0`
+  // can override the default positioning.
+  styles: ':host{position:relative;display:block}',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameSequenceComponent {
