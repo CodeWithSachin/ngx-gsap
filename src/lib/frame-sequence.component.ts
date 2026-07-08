@@ -31,9 +31,10 @@ import { prefersReducedMotion } from './reduced-motion';
     <canvas #cv style="position:absolute;inset:0;display:block;width:100%;height:100%"></canvas>
     <ng-content />
   `,
-  // :host (not inline style) so consumer classes like `absolute inset-0`
-  // can override the default positioning.
-  styles: ':host{position:relative;display:block}',
+  // :where() gives the default ZERO specificity — emulated :host compiles to
+  // an attribute selector that would otherwise tie with (and, being injected
+  // after the global sheet, beat) consumer classes like `absolute`.
+  styles: ':where(:host){position:relative;display:block}',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameSequenceComponent {
@@ -118,15 +119,17 @@ export class FrameSequenceComponent {
         );
       }
 
-      const onResize = () => {
+      // ResizeObserver (not window resize): catches late layout — sticky
+      // stages, hydration reflows, orientation changes.
+      this.resizeCanvas();
+      const ro = new ResizeObserver(() => {
         this.resizeCanvas();
         this.draw(this.frameIndex);
-      };
-      this.resizeCanvas();
-      window.addEventListener('resize', onResize, { passive: true });
+      });
+      ro.observe(el);
 
       destroyRef.onDestroy(() => {
-        window.removeEventListener('resize', onResize);
+        ro.disconnect();
         triggers.forEach((t) => t.kill());
         this.bitmaps.forEach((b) => 'close' in b && b.close());
         this.bitmaps = [];
