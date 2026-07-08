@@ -43,9 +43,24 @@ export class FrameSequenceComponent {
   /** Pin the host and scrub across this many viewport-heights. 0 = no pin. */
   readonly pinLength = input(200);
   readonly fit = input<'cover' | 'contain'>('cover');
+  /**
+   * External-drive mode: creates NO pin/scrub of its own — the parent (e.g.
+   * an already-pinned stage's timeline) calls `setProgress()` each update.
+   * Lazy preload still happens automatically.
+   */
+  readonly external = input(false);
 
   /** 0–1 sequence progress (drive overlay text swaps off this). */
   readonly progress = signal(0);
+
+  /** Drive the sequence from an external timeline (requires `external`). */
+  setProgress(p: number): void {
+    const count = this.frames().length;
+    const clamped = Math.min(1, Math.max(0, p));
+    this.progress.set(clamped);
+    const next = Math.min(count - 1, Math.floor(clamped * count));
+    if (next !== this.frameIndex) this.draw(next);
+  }
 
   private bitmaps: (ImageBitmap | HTMLImageElement)[] = [];
   private frameIndex = 0;
@@ -59,12 +74,13 @@ export class FrameSequenceComponent {
       const triggers: ScrollTrigger[] = [];
       const reduced = prefersReducedMotion();
 
-      // Lazy preload ~2 viewports before arrival; reduced motion shows the
-      // final frame and completes overlays immediately (no pin, no scrub).
+      // Lazy preload before arrival (wider margin in external mode, since the
+      // host usually sits inside a tall pinned section); reduced motion shows
+      // the final frame and completes overlays immediately (no pin, no scrub).
       triggers.push(
         ScrollTrigger.create({
           trigger: el,
-          start: 'top 200%',
+          start: this.external() ? 'top 300%' : 'top 200%',
           once: true,
           onEnter: () =>
             void this.preload().then(() => {
@@ -80,7 +96,7 @@ export class FrameSequenceComponent {
       const state = { frame: 0 };
       const count = () => this.frames().length;
 
-      if (!reduced) {
+      if (!reduced && !this.external()) {
         triggers.push(
           ScrollTrigger.create({
             trigger: el,
