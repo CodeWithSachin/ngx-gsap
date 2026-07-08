@@ -31,10 +31,11 @@ import { prefersReducedMotion } from './reduced-motion';
     <canvas #cv style="position:absolute;inset:0;display:block;width:100%;height:100%"></canvas>
     <ng-content />
   `,
-  // :where() gives the default ZERO specificity — emulated :host compiles to
-  // an attribute selector that would otherwise tie with (and, being injected
-  // after the global sheet, beat) consumer classes like `absolute`.
-  styles: ':where(:host){position:relative;display:block}',
+  // NO position default: component styles are un-layered and outrank
+  // Tailwind's layered utilities regardless of specificity — any default
+  // here would silently override consumer positioning. Consumers position
+  // the host themselves (e.g. `relative h-screen`, `absolute inset-0`).
+  styles: ':where(:host){display:block}',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameSequenceComponent {
