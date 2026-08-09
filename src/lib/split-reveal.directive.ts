@@ -11,6 +11,7 @@ import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { prefersReducedMotion } from './reduced-motion';
+import { scheduleScrollRefresh } from './scroll-refresh';
 
 /**
  * Split-text reveal on scroll (GSAP SplitText 3.13).
@@ -38,11 +39,7 @@ export class SplitRevealDirective {
       const host = this.el.nativeElement;
       const split = new SplitText(host, { type: this.mode() });
       const targets =
-        this.mode() === 'chars'
-          ? split.chars
-          : this.mode() === 'lines'
-            ? split.lines
-            : split.words;
+        this.mode() === 'chars' ? split.chars : this.mode() === 'lines' ? split.lines : split.words;
 
       const ctx = gsap.context(() => {
         gsap.from(targets, {
@@ -56,6 +53,9 @@ export class SplitRevealDirective {
             : { trigger: host, start: 'top 85%', toggleActions: 'play none none reverse' },
         });
       }, host);
+
+      // Layout just changed under ScrollTrigger — re-measure once it settles.
+      scheduleScrollRefresh();
 
       destroyRef.onDestroy(() => {
         ctx.revert();

@@ -3,13 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'lib-ngx-gsap',
   imports: [],
-  template: `
-    <p>
-      ngx-gsap works!
-    </p>
-  `,
+  template: ` <p>ngx-gsap works!</p> `,
   styles: ``,
 })
-export class NgxGsap {
-
-}
+export class NgxGsap {}

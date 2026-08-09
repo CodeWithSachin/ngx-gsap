@@ -4,6 +4,7 @@
 
 export * from './lib/provide-gsap';
 export * from './lib/reduced-motion';
+export * from './lib/scroll-refresh';
 export * from './lib/scroll.service';
 export * from './lib/scrub-timeline.directive';
 export * from './lib/split-reveal.directive';

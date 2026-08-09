@@ -43,6 +43,17 @@ export class ScrollService {
     this.lenis?.raf(time * 1000);
   };
 
+  /**
+   * Re-measure every ScrollTrigger.
+   *
+   * `provideGsap()` already does this once web fonts settle. Call it yourself
+   * after anything else that changes page height late — a lazy-loaded image
+   * without reserved space, an accordion opening, a route-level view swap.
+   */
+  refresh(): void {
+    if (this.isBrowser) ScrollTrigger.refresh();
+  }
+
   scrollTo(target: string | number | HTMLElement, offset = 0): void {
     if (this.lenis) {
       this.lenis.scrollTo(target as never, { offset });

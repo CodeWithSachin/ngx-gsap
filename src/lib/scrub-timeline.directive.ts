@@ -11,6 +11,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { prefersReducedMotion } from './reduced-motion';
+import { scheduleScrollRefresh } from './scroll-refresh';
 
 /**
  * Declarative scroll-scrubbed timeline bound to the host element.
@@ -52,6 +53,9 @@ export class ScrubTimelineDirective {
         this.timelineReady.emit(tl); // consumer populates synchronously
         if (reduced) tl.progress(1).pause(); // jump to final state
       }, this.el.nativeElement);
+
+      // Layout just changed under ScrollTrigger — re-measure once it settles.
+      scheduleScrollRefresh();
 
       destroyRef.onDestroy(() => ctx.revert());
     });

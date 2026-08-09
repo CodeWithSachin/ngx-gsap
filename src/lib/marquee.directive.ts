@@ -10,6 +10,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { prefersReducedMotion } from './reduced-motion';
+import { scheduleScrollRefresh } from './scroll-refresh';
 
 /**
  * Infinite marquee. Wraps host content in a track, clones it until the row
@@ -64,6 +65,9 @@ export class MarqueeDirective {
         { xPercent: from },
         { xPercent: to, duration, ease: 'none', repeat: -1 },
       );
+
+      // Layout just changed under ScrollTrigger — re-measure once it settles.
+      scheduleScrollRefresh();
 
       destroyRef.onDestroy(() => this.tween?.kill());
     });

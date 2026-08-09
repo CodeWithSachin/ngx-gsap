@@ -14,6 +14,7 @@ import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { prefersReducedMotion } from './reduced-motion';
+import { scheduleScrollRefresh } from './scroll-refresh';
 
 /**
  * Scroll-scrubbed canvas frame sequence (the Navarasa tiger / Drishti eyes).
@@ -128,6 +129,9 @@ export class FrameSequenceComponent {
         this.draw(this.frameIndex);
       });
       ro.observe(el);
+
+      // Layout just changed under ScrollTrigger — re-measure once it settles.
+      scheduleScrollRefresh();
 
       destroyRef.onDestroy(() => {
         ro.disconnect();

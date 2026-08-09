@@ -8,9 +8,8 @@ describe('NgxGsap', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxGsap]
-    })
-    .compileComponents();
+      imports: [NgxGsap],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NgxGsap);
     component = fixture.componentInstance;

@@ -10,6 +10,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import gsap from 'gsap';
 import { prefersReducedMotion } from './reduced-motion';
+import { scheduleScrollRefresh } from './scroll-refresh';
 
 /**
  * Counts the host's text from 0 to `ngxCountUp` when scrolled into view.
@@ -44,6 +45,9 @@ export class CountUpDirective {
           host.textContent = `${Math.round(state.value)}${this.suffix()}`;
         },
       });
+
+      // Layout just changed under ScrollTrigger — re-measure once it settles.
+      scheduleScrollRefresh();
 
       destroyRef.onDestroy(() => {
         tween.scrollTrigger?.kill();
