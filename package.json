@@ -1,5 +1,5 @@
 {
-  "name": "@codewithsachin/ngx-gsap",
+  "name": "@code_with_sachin/ngx-gsap",
   "version": "0.1.0",
   "description": "Angular directives for GSAP + Lenis \u2014 scrub timelines, split-text reveals, marquees, counters and canvas frame sequences.",
   "keywords": [

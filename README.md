@@ -1,4 +1,4 @@
-# @codewithsachin/ngx-gsap
+# @code_with_sachin/ngx-gsap
 
 Angular directives for [GSAP](https://gsap.com) + [Lenis](https://lenis.darkroom.engineering) —
 scrub timelines, split-text reveals, marquees, counters and canvas frame sequences.
@@ -19,7 +19,7 @@ reverts on destroy. This package is that boilerplate, written once, as directive
 ## Install
 
 ```bash
-npm i @codewithsachin/ngx-gsap gsap lenis
+npm i @code_with_sachin/ngx-gsap gsap lenis
 ```
 
 Peer dependencies: Angular 22+, `gsap` 3.13+, `lenis` 1.3+. SplitText is a GSAP plugin,
@@ -29,7 +29,7 @@ free from GSAP 3.13 onward — which is why the peer range starts there.
 
 ```ts
 import { ApplicationConfig } from '@angular/core';
-import { provideGsap } from '@codewithsachin/ngx-gsap';
+import { provideGsap } from '@code_with_sachin/ngx-gsap';
 
 export const appConfig: ApplicationConfig = {
   // Registers ScrollTrigger + SplitText once, browser-only.
@@ -57,7 +57,7 @@ Peer ranges are wider than this; the **Tested** column is the exact combination 
 
 ```ts
 import { ApplicationConfig } from '@angular/core';
-import { provideGsap } from '@codewithsachin/ngx-gsap';
+import { provideGsap } from '@code_with_sachin/ngx-gsap';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideGsap()],
@@ -84,7 +84,7 @@ import {
   ScrubTimelineDirective,
   FrameSequenceComponent,
   provideGsap,
-} from '@codewithsachin/ngx-gsap';
+} from '@code_with_sachin/ngx-gsap';
 
 import { AppComponent } from './app.component';
 
@@ -246,7 +246,7 @@ call `ScrollService.refresh()` (or the exported `scheduleScrollRefresh()`) yours
 A small SSR-safe helper, exported for consumers building their own reduced-motion paths.
 
 ```ts
-import { prefersReducedMotion } from '@codewithsachin/ngx-gsap';
+import { prefersReducedMotion } from '@code_with_sachin/ngx-gsap';
 if (!prefersReducedMotion()) {
   /* … */
 }
