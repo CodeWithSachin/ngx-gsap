@@ -1,0 +1,43 @@
+{
+  "name": "@code_with_sachin/ngx-gsap",
+  "version": "0.1.1",
+  "description": "Angular directives for GSAP + Lenis — scrub timelines, split-text reveals, marquees, counters and canvas frame sequences.",
+  "keywords": [
+    "angular",
+    "gsap",
+    "scrolltrigger",
+    "splittext",
+    "lenis",
+    "smooth-scroll",
+    "marquee",
+    "count-up",
+    "frame-sequence",
+    "ssr",
+    "standalone",
+    "signals"
+  ],
+  "homepage": "https://sachinsingh.me/packages/gsap",
+  "license": "MIT",
+  "author": "Sachin Singh (https://sachinsingh.me)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeWithSachin/ngx-gsap.git",
+    "directory": "projects/ngx-gsap"
+  },
+  "bugs": {
+    "url": "https://github.com/CodeWithSachin/ngx-gsap/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

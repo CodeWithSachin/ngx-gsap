@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "analytics": false
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "ngx-gsap": {
+      "projectType": "library",
+      "root": "projects/ngx-gsap",
+      "sourceRoot": "projects/ngx-gsap/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-gsap/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ngx-gsap/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/ngx-gsap/tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  }
+}
